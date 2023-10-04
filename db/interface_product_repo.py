@@ -1,24 +1,25 @@
-from abc import ABC, abstractmethod
+from models.product_model import Product
+from abc import abstractmethod
 
 #interface
 class IProductRepo():
 
     @abstractmethod
-    def AddProduct(self, table_name, data):
+    def add_product(self, product:Product):
         pass
 
     @abstractmethod
-    def UpdateProduct(self, table_name, data):
+    def update_product_data(self, data):
         pass
 
     @abstractmethod
-    def ImportProductList(self, path):
+    def import_product_list(self, path):
         pass
 
     @abstractmethod
-    def GetProduct(self, table_name, data):
+    def get_product(self, product_id):
         pass
 
     @abstractmethod
-    def GetAllProduct(self, table_name, data):
+    def get_all_products(self):
         pass

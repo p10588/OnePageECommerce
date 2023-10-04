@@ -1,0 +1,5 @@
+0,vvv,This is a sample product description.,100,80,https://example.com/sample_product.jpg
+1,vvv,This is a sample product description.,100,80,https://example.com/sample_product.jpg
+2,bbb,This is a sample product description.,100,80,https://example.com/sample_product.jpg
+3,vvv,This is a sample product description.,100,80,https://example.com/sample_product.jpg
+4,aaa,This is a sample product description.,100,80,https://example.com/sample_product.jpg
