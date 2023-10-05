@@ -1,22 +1,23 @@
 import os
 import psycopg2
 from models.product_model import Product, Product_Spec, Product_Spec_Detail
-from psycopg2 import pool, sql, extensions
+from psycopg2 import pool
 from db.interface_product_repo import IProductRepo
 
-class ProductRepo_Postgreaql(IProductRepo):
+class ProductRepo_Postgres(IProductRepo):
 
     DB_HOST = os.getenv('DB_HOST')
     DB_NAME = os.getenv('DB_NAME')
     DB_USER = os.getenv('DB_USER')
     DB_PASSWORD = os.getenv('DB_PASSWORD')
+    DB_PORT = os.getenv('DB_PORT')
 
     DB_DATA_POOL = {
         'host': DB_HOST,
         'database': DB_NAME,
         'user': DB_USER,
         'password': DB_PASSWORD,
-        'port' : 5432,
+        'port' : DB_PORT,
         'minconn' : 1,
         'maxconn' : 5,
     }
