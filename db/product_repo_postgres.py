@@ -181,5 +181,6 @@ class ProductRepo_Postgres(IProductRepo):
             )
             connection.commit()
     
-     
+    def __del__(self):
+        self.connection_pool.closeall() 
 

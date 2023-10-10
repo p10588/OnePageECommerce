@@ -106,3 +106,6 @@ class UserRepo_postgres(IUserRepo):
             ''', (user_id, )
             )
             connection.commit()
+
+    def __del__(self):
+        self.connection_pool.closeall()

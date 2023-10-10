@@ -2,7 +2,7 @@ from models.product_model import Product
 from abc import abstractmethod
 
 #interface
-class IProductRepo():
+class IProductRepo:
 
     @abstractmethod
     def add_product(self, product:Product):
