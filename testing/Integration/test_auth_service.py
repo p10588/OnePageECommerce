@@ -1,5 +1,5 @@
 import pytest
-from service.auth.auth_service import AuthFactory
+from service.auth.auth import AuthFactory
 
 @pytest.mark.parametrize('class_name',['Auth_Line', 'Auth_Google'])
 def test_auth_factory(class_name):

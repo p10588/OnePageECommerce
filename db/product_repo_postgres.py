@@ -2,7 +2,7 @@ import os
 import psycopg2
 from models.product_model import Product, Product_Spec, Product_Spec_Detail
 from psycopg2 import pool
-from db.interface_product_repo import IProductRepo
+from models.interface_product_repo import IProductRepo
 
 class ProductRepo_Postgres(IProductRepo):
 

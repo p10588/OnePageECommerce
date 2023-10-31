@@ -4,25 +4,24 @@ import json
 
 class CookieService:
 
-    def SetCookie(self, key, value, expires):
+    def set_cookie(self, key, value, expires):
         response = make_response('set cookies success')
-        response.set_cookie(key, json.dumps(value), expires)
+
+        data = json.dumps(value)
+        response.set_cookie(key, data, expires)
         return response
     
-    def GetCookie(self, key):
+    def get_cookie(self, key):
         cookie = request.cookies.get(key)
         if cookie:
-            try:
-                return json.loads(cookie)
-            except json.JSONDecodeError as e:
-                print('Error: {e}')
-                return None
+            return json.loads(cookie)
         else:
-            print('No Cookies')
-            return None
+            ex = f'Cant find Cookies {key}'
+            print(ex)
+            raise Exception(ex)
  
         
-    def RemoveCookie(self,key):
+    def delete_cookie(self,key):
         response = make_response('remove cookies success')
         response.delete_cookie(key)
         return response

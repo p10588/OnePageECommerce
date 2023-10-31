@@ -1,5 +1,5 @@
 import os
-from db.interface_user_repo import IUserRepo
+from models.interface_user_repo import IUserRepo
 from models.user_model import User
 from psycopg2 import pool
 
@@ -66,7 +66,7 @@ class UserRepo_postgres(IUserRepo):
     def __get_single_user_by_id(self, connection, user_id ):
         with connection.cursor() as cursor:
             sql_select_user = 'SELECT * FROM users WHERE user_id = %s'
-            cursor.execute(sql_select_user, user_id)
+            cursor.execute(sql_select_user, (user_id,))
             connection.commit()
             user_data = cursor.fetchone()
             user = User(user_data[0], user_data[1], user_data[2],
