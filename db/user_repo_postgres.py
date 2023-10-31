@@ -1,6 +1,6 @@
 import os
 from models.interface_user_repo import IUserRepo
-from models.user_model import User
+from models.auth_model import User
 from psycopg2 import pool
 
 class UserRepo_postgres(IUserRepo):

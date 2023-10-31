@@ -149,7 +149,7 @@ DB_DATA_POOL = {
     'minconn' : 1,
     'maxconn' : 20,
 }
-test_db_connection_pool = pool.ThreadedConnectionPool(**DB_DATA_POOL)
+
 
 def conftest_order(test_data):
     order = Order(**test_data)

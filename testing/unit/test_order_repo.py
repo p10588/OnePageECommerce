@@ -5,6 +5,7 @@ from testing.conftest import *
 
 def test_get_next_order_id():
     try:
+        test_db_connection_pool = pool.ThreadedConnectionPool(**DB_DATA_POOL)
         order_repo = OrderRepo(test_db_connection_pool.getconn())
         order_id = order_repo.get_next_order_id()
         print(order_id)
@@ -19,6 +20,7 @@ def test_get_next_order_id():
                           ])
 def test_add_order(test_data):
     try:
+        test_db_connection_pool = pool.ThreadedConnectionPool(**DB_DATA_POOL)
         connection = test_db_connection_pool.getconn()
         order_repo = OrderRepo(connection)
         order = conftest_order(test_data)
@@ -35,6 +37,7 @@ def test_add_order(test_data):
                           ])
 def test_update_order_data(test_data):
     try:
+        test_db_connection_pool = pool.ThreadedConnectionPool(**DB_DATA_POOL)
         connection = test_db_connection_pool.getconn()
         order_repo = OrderRepo(connection)
         order = conftest_order(test_data)
@@ -49,6 +52,7 @@ def test_update_order_data(test_data):
                          [(test_testuser1_order_data)])
 def test_list_order_by_user_id(test_data):
     try:
+        test_db_connection_pool = pool.ThreadedConnectionPool(**DB_DATA_POOL)
         connection = test_db_connection_pool.getconn()
         order_repo = OrderRepo(connection)
         order = conftest_order(test_data)
@@ -62,6 +66,7 @@ def test_list_order_by_user_id(test_data):
 
 def test_get_next_order_item_id():
     try:
+        test_db_connection_pool = pool.ThreadedConnectionPool(**DB_DATA_POOL)
         order_repo = OrderRepo(test_db_connection_pool.getconn())
         order_item_id = order_repo.get_next_order_item_id()
         print(order_item_id)
@@ -72,6 +77,7 @@ def test_get_next_order_item_id():
 
 def test_add_order_item():
     try:
+        test_db_connection_pool = pool.ThreadedConnectionPool(**DB_DATA_POOL)
         connection = test_db_connection_pool.getconn()
         order_repo = OrderRepo(connection)
         order_repo.add_order_item(order_item_1)
@@ -83,6 +89,7 @@ def test_add_order_item():
 
 def test_list_order_items_by_order_id():
     try:
+        test_db_connection_pool = pool.ThreadedConnectionPool(**DB_DATA_POOL)
         connection = test_db_connection_pool.getconn()
         order_repo = OrderRepo(connection)
         orderitems = order_repo.list_order_items_by_order_id(-1)
@@ -97,6 +104,7 @@ def test_list_order_items_by_order_id():
 
 def test_update_order_item_data():
     try:
+        test_db_connection_pool = pool.ThreadedConnectionPool(**DB_DATA_POOL)
         connection = test_db_connection_pool.getconn()
         order_repo = OrderRepo(connection)
         order_repo.update_order_item_data(-1,'quantity', 3)
@@ -108,6 +116,7 @@ def test_update_order_item_data():
 
 def test_remove_order_item():
     try:
+        test_db_connection_pool = pool.ThreadedConnectionPool(**DB_DATA_POOL)
         connection = test_db_connection_pool.getconn()
         order_repo = OrderRepo(connection)
         order_repo.remove_order_item(-1)
@@ -123,6 +132,7 @@ def test_remove_order_item():
                           ])
 def test_remove_order(test_data):
     try:
+        test_db_connection_pool = pool.ThreadedConnectionPool(**DB_DATA_POOL)
         connection = test_db_connection_pool.getconn()
         order_repo = OrderRepo(connection)
         order = conftest_order(test_data)

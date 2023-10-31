@@ -1,4 +1,4 @@
-from models.user_model import User
+from models.auth_model import User
 from abc import abstractmethod
 
 class IUserRepo:

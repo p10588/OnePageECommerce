@@ -17,6 +17,7 @@ def test_orderflow_factory(class_name):
 def test_place_order():
     try:
         order_service = OrderService(None)
+        test_db_connection_pool = pool.ThreadedConnectionPool(**DB_DATA_POOL)
         order_service.place_order(test_place_order_data, UowOrder(test_db_connection_pool))
     except Exception as e:
         print(f'Error: {e}')
@@ -25,6 +26,7 @@ def test_place_order():
 def test_get_user_orders():
     try:
         order_service = OrderService(None)
+        test_db_connection_pool = pool.ThreadedConnectionPool(**DB_DATA_POOL)
         data = order_service.get_user_orders('aaa@aaa.com', UowOrder(test_db_connection_pool))   
         print(data)
     except Exception as e:

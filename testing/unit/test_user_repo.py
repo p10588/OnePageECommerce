@@ -1,6 +1,6 @@
 import pytest
 from db.user_repo_postgres import UserRepo_postgres
-from models.user_model import User
+from models.auth_model import User
 
 test_user_id = 'test_user'
 def test_add_new_user():
