@@ -29,18 +29,25 @@ One-page e-commerce backend in Python
 ## 服務職責拆分
 ### Order_Service
  <br/>
+ 
 ### Auth_Service
  <br/>
+ 
 ### Shop_Service
  <br/>
+ 
 ### Product_Service
  <br/>
+ 
 ### Email Service
  <br/>
+ 
 ### Payment Service
  <br/>
+ 
 ### Logistics Service
  <br/>
+ 
 ### Inventory Service
  <br/>
 
@@ -55,10 +62,13 @@ flask框架，搭配blueprint解耦Api層與服務層
 
 ### 領域層
  <br/>
+ 
 ### 資料層
  <br/>
+ 
 ### 測試
  <br/>
+ 
 ## 待優化項目
 
 ## 待執行項目
