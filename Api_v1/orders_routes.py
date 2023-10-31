@@ -1,5 +1,4 @@
 from flask import Blueprint, request, jsonify
-from db.cart_repo_cookies import CartRepo
 from service.order_service import OrderService
 import os
 from psycopg2 import pool
@@ -24,45 +23,6 @@ connection_pool = pool.ThreadedConnectionPool(**DB_DATA_POOL)
 
 orders_bp = Blueprint('orders_v1', __name__)
 order_service = OrderService()
-
-# Process Cart 
-@orders_bp.route('/orders/addtocart', methods =['POST'])
-def AddToCart():
-    try:
-        data = request.get_json(force=True)  
-        response = order_service.add_to_cart(data)
-        return response 
-    except Exception as e:
-        print(f'Error: {e}')
-        return jsonify({'error' : e}), 400
-
-@orders_bp.route('/orders/removefromcart' , methods =['POST'])
-def RemoveFromCart():
-    try:
-        data = request.get_json(force=True)
-        response = order_service.remove_from_cart(data)
-        return response
-    except Exception as e:
-        print(f'Error: {e}')
-        return jsonify({'error' : e}), 400
-
-@orders_bp.route('/orders/deletecart', methods =['POST'])
-def DeleteCart():
-    try:
-        response = order_service.delete_cart()
-        return response
-    except Exception as e:
-        print(f'Error: {e}')
-        return jsonify({'error' : e}), 400
-
-@orders_bp.route('/orders/getcart', methods =['GET'])
-def GetCart():
-    try:
-        data = order_service.get_cart()
-        return data
-    except Exception as e:
-        print(f'Error: {e}')
-        return jsonify({'error' : e}), 400
 
 # Process Order
 @orders_bp.route('/orders/getuserorders', methods =['GET'])

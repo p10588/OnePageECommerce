@@ -1,9 +1,6 @@
 from models.order.order_model import OrderData, Order, OrderItemData, OrderItem
 from models.order.order_flow import OrderFlowFactory, IOrderFlow, OrderFlowType
-from models.order.interface_cart_repo import ICartRepo
-from models.order.cart_model import Cart, CartItemData
 from uow.uow_order import UowOrder
-from service.cookie_service import CookieService
 from service.logistics_service import LogisticsService
 from service.payment_service import PaymentService, PaymentType, PaymentStatus
 from service.inventory_service import InventoryService
@@ -24,47 +21,10 @@ class CustomEncoder(json.JSONEncoder):
 class OrderService:
 
     def __init__(self):
-        self.cart = Cart()
-        self.cookie_service = CookieService()
         self.logistics_service = LogisticsService()
         self.payment_service = PaymentService()
         self.inventory_service = InventoryService()
     
-    def get_cart(self):
-        # get order item from cookie
-        data = self.cookie_service.get_cookie('cart')
-
-        if data is None or len(data)<=0:
-            return 'Cart is empty'
-        
-        return data
-
-    def add_to_cart(self, data):
-        # verify data
-        cart_item = CartItemData(**data)
-
-        self.cart.add_to_cart(cart_item)
-
-        cart_items_json = [item.__dict__ for item in self.cart.cart_items]
-
-        response = self.cookie_service.set_cookie('cart', cart_items_json, 3600)
-        return response
-
-    def remove_from_cart(self, data):
-        if not isinstance(data['product_id'], int):
-            raise Exception('Data is invalid')
-        
-        product_id = data['product_id']
-        self.cart.remove_from_cart(product_id)
-        cart_items_json = [item.__dict__ for item in self.cart.cart_items]
-        response = self.cookie_service.set_cookie('cart', cart_items_json, 3600)
-        return response
-
-    def delete_cart(self):
-        response = self.cookie_service.delete_cookie('cart')
-        self.cart.clear_cart()
-        return response
-
 
     def place_order(self, data, uow:UowOrder):
         
@@ -153,7 +113,6 @@ class OrderService:
             uow.commit()
         return json.dumps(order_dicts, cls=CustomEncoder, indent=None)
 
-
     def set_order_paid(data, uow:UowOrder):
         if not isinstance(data['order_id'], int):
             raise Exception('Data is invalid')
@@ -162,6 +121,7 @@ class OrderService:
             uow.order_repo.update_order_data(order_id,'payment_status' , PaymentStatus.PAID)
             uow.commit()
         return
+
 
     def __get_user_id(self):
         return None
