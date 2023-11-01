@@ -4,7 +4,7 @@ One-page e-commerce backend in Python
  <br/>  
 ## 動機目的
  - 運用TDD與DDD進行一頁式電商後台開發  
-最終目標是開發一個的分散式微服務  
+最終目標是開發一個的分散式微服務
 具擴展性、高適應性、可漸進式變更、安全（架構特性持續優化)  
 並紮實學習各種後端技術與架構  
  <br/> 
@@ -25,34 +25,85 @@ One-page e-commerce backend in Python
  <br/>
 
 ## 架構圖
-![image](https://github.com/p10588/OnePageEcommerce/assets/12834223/4344502d-c8cd-434a-b5df-15b17853807b)
+![image](https://github.com/p10588/OnePageEcommerce/assets/12834223/db0c794a-7aa9-4757-aa85-e5ad4456489b)
+
+## 資料關聯
+![image](https://github.com/p10588/OnePageEcommerce/assets/12834223/397814de-d6f6-4e0f-98db-45dd6da122e8)
 
 ## 服務職責拆分
- - Order_Service
- <br/>
+   
+ - **Cart_Service：** 
+   
+   負責購物車業務領域並整合Cookie服務
+
+   > - add to cart
+   > - remove from cart
+   > - get cart 
+   > - clear cart
+
+   - 待優化
+     - [ ] 將CookieSevice用Repo抽象層隔離，跟CartService解耦合
+
+- **Product_Service (WIP)**
+  
+  商品相關，主要提供商城中商品資料與商品細節的呈現
+  
+  > - get all products
+  > - add product
+  > - remove product
+  > - update product
+  > - import product list
+  
+  - 待優化
+     - [ ] 將資料庫操作原子化
+
+ - **Order_Service：**  
+
+   整合訂單領域邏輯，用工廠模式管理訂單流程(order_flow)，整合物流、金流、倉儲服務  
+   通知與更新狀態
+   
+   > - get user order
+   > - place order
+   > - update order status (WIP)
+   > - update payment status (WIP)
+   > - update shipping status (WIP)
+
+ - **Auth_Service (WIP)**
+   
+   用戶與認證相關業務，包含用戶權限管理，用工廠模式整合OAuth2.0，以抽象快速擴充
+   
+   > - login
+   > - signin
+   > - logout
+   > - update user permission
+   > - update user data
+   > - get api key
+
+- **Inventory Service (WIP)**
+  
+  以服務層跟訂單服務串接，以抽象層來分離跟庫存系統的溝通，目標是不管是跟外部的倉儲  
+  系統或自建的倉儲系統都可以透過Rest交換訊息
  
- - Auth_Service
- <br/>
- 
- - Shop_Service
- <br/>
- 
- - Product_Service
- <br/>
- 
- - Email Service
- <br/>
- 
- - Payment Service
- <br/>
- 
- - Logistics Service
- <br/>
- 
- - Inventory Service
- <br/>
+ - **Payment Service (WIP)**
+   
+   以服務層跟訂單服務串接，以抽象工廠來讓不同第三方支付方式可以擴充，以Rest的方式  
+   將資料打到第三方進行付款處理，再由訂單服務以Rest接受callback結果
+
+ - **Logistics Service (WIP)**
+   
+   以服務層跟訂單服務串接，以抽象工廠來讓物流方式得以擴充或替換，以Rest的方式將資料  
+   打到第三方物流，由物流中心透過Rest將物流狀態回報至訂單服務
+
+ - **Shop_Service (規劃中)**
+   
+   商城外觀相關服務
+
+ - **Email Service (規劃中)**
+   
+   Email服務串接第三方Email服務，讓各服務可以寄出Eamil通知
 
 ## 技術架構
+
 ### Api層：
  - flask框架，搭配blueprint解耦Api層與服務層，進行Api版本管理，並提供統一部署與分散部署的彈性
  
@@ -69,7 +120,7 @@ One-page e-commerce backend in Python
  - 資料格式驗證
       
  - 整合領域跟資料層的組件
-      
+    
  <br/>
  
 ### 領域層：
