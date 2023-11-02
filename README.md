@@ -64,9 +64,9 @@ One-page e-commerce backend in Python
    
    > - get user order
    > - place order
-   > - update order status (WIP)
-   > - update payment status (WIP)
-   > - update shipping status (WIP)
+   > - update order status
+   > - update payment status
+   > - update shipping status
 
  - **Auth_Service (WIP)**
    
