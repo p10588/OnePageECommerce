@@ -59,8 +59,8 @@ One-page e-commerce backend in Python
 
  - **Order_Service：**  
 
-   整合訂單領域邏輯，用工廠模式管理訂單流程(order_flow)，整合物流、金流、倉儲服務  
-   通知與更新狀態
+   整合訂單領域邏輯，用工廠模式管理訂單流程(order_flow)，以抽象整合第三方。
+   物流、金流、倉儲服務 通知與更新狀態
    
    > - get user order
    > - place order
