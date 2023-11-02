@@ -64,6 +64,16 @@ def test_list_order_by_user_id(test_data):
         print(e)
         assert False
 
+def test_get_order():
+    try:
+        test_db_connection_pool = pool.ThreadedConnectionPool(**DB_DATA_POOL)
+        order_repo = OrderRepo(test_db_connection_pool.getconn())
+        order = order_repo.get_order(4)
+        assert order.order_id == 4
+    except Exception as e:
+        print(e)
+        assert False
+
 def test_get_next_order_item_id():
     try:
         test_db_connection_pool = pool.ThreadedConnectionPool(**DB_DATA_POOL)

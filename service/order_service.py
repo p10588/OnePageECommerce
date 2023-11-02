@@ -1,7 +1,7 @@
-from models.order.order_model import OrderData, Order, OrderItemData, OrderItem
+from models.order.order_model import OrderData, Order, OrderItemData, OrderItem, OrderStatusType
 from models.order.order_flow import OrderFlowFactory, IOrderFlow, OrderFlowType
 from uow.uow_order import UowOrder
-from service.logistics_service import LogisticsService
+from service.logistics_service import LogisticsService,LogisticsStatus
 from service.payment_service import PaymentService, PaymentType, PaymentStatus
 from service.inventory_service import InventoryService
 from datetime import datetime
@@ -25,7 +25,6 @@ class OrderService:
         self.payment_service = PaymentService()
         self.inventory_service = InventoryService()
     
-
     def place_order(self, data, uow:UowOrder):
         
         order_data = OrderData(**data) # verfiy order data struct is match
@@ -66,10 +65,21 @@ class OrderService:
 
     def __create_order(self, order_id, order_data:OrderData):
         # create new order 
-        order = Order(order_id, self.__get_user_id(), order_data.shipping_method,
-                    order_data.shipping_address, order_data.contact_phone,
-                    order_data.email, order_data.payment_method, datetime.now(),
-                    0, 1, 1, 1, None) 
+        order = Order(
+            order_id=order_id, 
+            user_id=self.__get_user_id(), 
+            order_status=OrderStatusType.PENDING,
+            order_date=datetime.now(), 
+            total_amount=0,
+            contact_phone=order_data.contact_phone,
+            email=order_data.email, 
+            shipping_method=order_data.shipping_method,
+            shipping_address=order_data.shipping_address,
+            shipping_status= LogisticsStatus.PENDING,
+            payment_method=order_data.payment_method, 
+            payment_status=PaymentStatus.PENDING,
+            payment_date=None,
+        ) 
 
         return order
 
@@ -113,19 +123,59 @@ class OrderService:
             uow.commit()
         return json.dumps(order_dicts, cls=CustomEncoder, indent=None)
 
-    def set_order_paid(data, uow:UowOrder):
+    def update_payment_status(self, data, uow:UowOrder):
         if not isinstance(data['order_id'], int):
             raise Exception('Data is invalid')
+        
+        if not isinstance(data['payment_status'], int):
+            raise Exception('Data is invalid')  
+        
         order_id = data['order_id']
+        payment_status = PaymentStatus(data['payment_status'])
         with uow:
-            uow.order_repo.update_order_data(order_id,'payment_status' , PaymentStatus.PAID)
+            order = self.__get_order(order_id, uow)
+            order.update_payment_status(payment_status.value)
+            uow.order_repo.update_order_data(order_id,'payment_status' , payment_status.value)
             uow.commit()
-        return
+        order_json = json.dumps(order.__dict__, cls=CustomEncoder, indent=None)
+        return order_json
 
+    def update_shipping_stauts(self, data, uow:UowOrder):
+        if not isinstance(data['order_id'], int):
+            raise Exception('Data is invalid')
+        
+        if not isinstance(data['shipping_status'], int):
+            raise Exception('Data is invalid')  
+        
+        order_id = data['order_id']
+        shipping_status = LogisticsStatus(data['shipping_status'])
+        with uow:
+            order = self.__get_order(order_id, uow)         
+            order.update_shipping_status(shipping_status.value)
+            uow.order_repo.update_order_data(order_id,'shipping_status' , shipping_status.value)
+            uow.commit()
 
-    def __get_user_id(self):
-        return None
+        order_json = json.dumps(order.__dict__, cls=CustomEncoder, indent=None)
+        return order_json
+
+    def update_order_status(self, data, uow:UowOrder):
+        if not isinstance(data['order_id'], int):
+            raise Exception('Data is invalid')
+        
+        if not isinstance(data['order_status'], int):
+            raise Exception('Data is invalid')  
+        
+        order_id = data['order_id']
+        order_status = OrderStatusType(data['order_status'])
+        with uow:
+            order = self.__get_order(order_id, uow)
+            order.update_order_status(order_status)
+            uow.order_repo.update_order_data(order_id, 'order_status' , order_status.value)
+            uow.commit()
+        order_json = json.dumps(order.__dict__, cls=CustomEncoder, indent=None)
+        return order_json
     
-    def __update_shipping_status(self):
-        pass
-
+    def __get_order(self, order_id, uow:UowOrder):  
+        order:Order = uow.order_repo.get_order(order_id)
+        order.set_order_items(uow.order_repo.list_order_items_by_order_id(order_id))
+        return order

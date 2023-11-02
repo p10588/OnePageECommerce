@@ -28,7 +28,8 @@ class OrderRepo(IOrderRepo):
         with self.connection.cursor() as cursor:
             sql_select_order = 'SELECT * FROM orders WHERE order_id = %s'
             cursor.execute(sql_select_order, (order_id, ))
-            order_data = cursor.fetchone()
+            data = cursor.fetchone()
+            order_data = Order(*data)
             return order_data
 
     def add_order(self, order:Order):

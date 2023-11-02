@@ -49,14 +49,38 @@ def PlaceOrder():
         return jsonify({'error' : error_message}), 400
     
 
-@orders_bp.route('/orders/AdvanceLogisticsStatus', methods =['POST'])
-def AdvanceLogisticsStatus():
-    return 'AdvanceLogisticsStatus'
+@orders_bp.route('/orders/updateshippingstatus', methods =['POST'])
+def UpdateLogisticsStatus():
+    try:
+        data = request.get_json(force=True) #force request data is json
+        uow = UowOrder(connection_pool)
+        respone = order_service.update_shipping_stauts(data, uow)
+        return jsonify(json.loads(respone))
+    except Exception as e:
+        print(f'Error: {e}')
+        error_message = f'{e}'
+        return jsonify({'error' : error_message}), 400
 
-@orders_bp.route('/orders/AdvancePaymentStatus', methods =['POST'])
+@orders_bp.route('/orders/updatepaymentstatus', methods =['POST'])
 def UpdatePaymentStatus():
-    return 'AdvancePaymentStatus'
+    try:
+        data = request.get_json(force=True) #force request data is json
+        uow = UowOrder(connection_pool)
+        respone = order_service.update_payment_status(data, uow)
+        return jsonify(json.loads(respone))
+    except Exception as e:
+        print(f'Error: {e}')
+        error_message = f'{e}'
+        return jsonify({'error' : error_message}), 400
 
-@orders_bp.route('/orders/PreparedOrderItems', methods =['POST'])
-def ReadyForShipment():
-    return 'AdvancePaymentStatus'
+@orders_bp.route('/orders/updateorderstatus', methods =['POST'])
+def UpdateOrderStatus():
+    try:
+        data = request.get_json(force=True) #force request data is json
+        uow = UowOrder(connection_pool)
+        respone = order_service.update_order_status(data, uow)
+        return jsonify(json.loads(respone))
+    except Exception as e:
+        print(f'Error: {e}')
+        error_message = f'{e}'
+        return jsonify({'error' : error_message}), 400
